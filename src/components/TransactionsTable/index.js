@@ -150,7 +150,7 @@ const TransactionsTable = ({
   };
 
   const handleEditCancel = () => {
-    setShowEditModal(false);
+    setShowEditModal(false); // Close the modal when cancel is triggered
   };
 
   // Handling the reset balance
@@ -227,7 +227,7 @@ const TransactionsTable = ({
         {showEditModal && (
           <EditEditDeleteModal
             show={showEditModal}
-            onClose={handleEditCancel}
+            onClose={handleEditCancel} // Pass the cancel function here
             transaction={selectedTransaction}
             onSave={handleEditSave}
             onDelete={handleDeleteSave}

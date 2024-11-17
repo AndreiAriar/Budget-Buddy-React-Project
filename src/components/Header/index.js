@@ -20,7 +20,7 @@ const Header = () => {
     <>
       <div className="navbar">
         <h1>
-          Financely
+          BudgetBuddy
           <TbMoneybag className="logo-image" />
         </h1>
         <AiFillSetting className="menu-btn" onClick={handleOpen} />

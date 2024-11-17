@@ -9,6 +9,7 @@ import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TransactionsTable from "../components/TransactionsTable";
 import ChartComponent from "../components/Charts";
+import EditDeleteModal from "../components/EditDelete"; // Corrected path
 
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -18,6 +19,8 @@ const Dashboard = () => {
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [currentBalance, setCurrentBalance] = useState(0);
+  const [selectedTransaction, setSelectedTransaction] = useState(null); // For selected transaction
+  const [showEditDeleteModal, setShowEditDeleteModal] = useState(false); // For modal visibility
 
   const showExpenseModal = () => {
     setIsExpenseModalVisible(true);
@@ -35,6 +38,10 @@ const Dashboard = () => {
     setIsIncomeModalVisible(false);
   };
 
+  const handleCancelEditDelete = () => {
+    setShowEditDeleteModal(false); // Close the edit/delete modal
+  };
+
   const onFinish = (values, type) => {
     const newTransaction = {
       type: type,
@@ -50,13 +57,11 @@ const Dashboard = () => {
 
   const addTransaction = async (transaction, many = false) => {
     try {
-      const docRef = await addDoc(
+      await addDoc(
         collection(db, `users/${user.uid}/transactions`),
         transaction
       );
       if (!many) toast.success("Transaction Added!");
-      setTransactions([...transactions, transaction]);
-      calculateBalance();
       fetchTransactions();
     } catch (err) {
       if (!many) toast.error("Couldn't add transaction");
@@ -72,17 +77,9 @@ const Dashboard = () => {
         transactionArray.push({ ...doc.data(), id: doc.id });
       });
       setTransactions(transactionArray);
-      toast.success("Transaction Fetched!");
+      toast.success("Transactions Fetched!");
     }
   };
-
-  useEffect(() => {
-    fetchTransactions();
-  }, [user]);
-
-  useEffect(() => {
-    calculateBalance();
-  }, [transactions]);
 
   const calculateBalance = () => {
     let totalIncome = 0;
@@ -108,6 +105,27 @@ const Dashboard = () => {
     setCurrentBalance(0);
     toast.success("Balance reset successful!");
   };
+
+  const handleEditTransaction = (transaction) => {
+    setSelectedTransaction(transaction); // Set selected transaction for editing
+    setShowEditDeleteModal(true); // Show the edit/delete modal
+  };
+
+  const handleDeleteTransaction = (transaction) => {
+    // Add delete logic here
+    toast.success("Transaction Deleted");
+    fetchTransactions(); // Refresh transactions after deletion
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => {
+    calculateBalance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactions]);
 
   return (
     <div>
@@ -154,7 +172,19 @@ const Dashboard = () => {
         addTransaction={addTransaction}
         fetchTransactions={fetchTransactions}
         onResetBalance={onResetBalance} // Pass onResetBalance function here
+        onEditTransaction={handleEditTransaction} // Pass handleEditTransaction here
       />
+      
+      {/* Edit/Delete Modal */}
+      {showEditDeleteModal && (
+        <EditDeleteModal
+          transaction={selectedTransaction}
+          onSave={addTransaction} // Or define your own save logic
+          onDelete={handleDeleteTransaction} // Pass delete logic
+          onCancel={handleCancelEditDelete} // Ensure cancel works here
+          show={showEditDeleteModal} // Control modal visibility
+        />
+      )}
     </div>
   );
 };

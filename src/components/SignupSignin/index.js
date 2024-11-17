@@ -4,17 +4,16 @@ import InputComponent from "../common/Input";
 import Button from "../common/Button";
 import { FcGoogle } from "react-icons/fc";
 import {
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, db, provider } from "../../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-// SignUp function
 const SignupSignin = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,200 +21,204 @@ const SignupSignin = () => {
   const [cfPassword, setcfPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginForm, setLoginForm] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
   const navigate = useNavigate();
-  
-  // Authenticate the user or basically create a new account using email and password
-  const signUnHandle = () => {
-    if (
-      name !== " " &&
-      email !== " " &&
-      password !== " " &&
-      cfPassword !== " "
-    ) {
+
+  // Handle user sign-up
+  const signUpHandle = () => {
+    if (name && email && password && cfPassword) {
       setLoading(true);
       if (password !== cfPassword) {
-        toast.error("Password does not match");
+        toast.error("Passwords do not match");
+        setLoading(false);
+        return;
       }
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in
           const user = userCredential.user;
-          toast.success("Sign in successfully");
-          setLoading(false);
+          console.log("User signed up:", user); // Log the user object
+          toast.success("Signed up successfully");
+          createDoc(user); // Create user document
           setLoginForm(true);
           setName("");
           setEmail("");
           setPassword("");
           setcfPassword("");
-
-          // create a doc with user id as the following id
-          createDoc(user);
         })
-        .catch((error) => {
-          toast.error(error.message);
-          setLoading(false);
-        });
+        .catch((error) => toast.error(error.message))
+        .finally(() => setLoading(false));
     } else {
-      toast.error("All fields required");
-      setLoading(false);
+      toast.error("All fields are required");
     }
   };
 
-  // Signin function
+  // Handle user sign-in
   const signInHandle = () => {
     setLoading(true);
     if (email && password) {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in
           const user = userCredential.user;
-
-          toast.success("Login successfully");
+          console.log("User logged in:", user); // Log the user object
+          toast.success("Logged in successfully");
           setEmail("");
           setPassword("");
-          setLoading(false);
-          // when user sign in successfully then navigate to the dashboard page
           navigate("/dashboard");
         })
-        .catch((error) => {
-          toast.error(error.message);
-          setLoading(false);
-        });
+        .catch((error) => toast.error(error.message))
+        .finally(() => setLoading(false));
     } else {
-      toast.error("All fields required");
+      toast.error("All fields are required");
       setLoading(false);
     }
   };
 
-  const createDoc = async (user) => {
-    // Make sure that the doc with the uid doesn't exist
-    // and after that Create a new doc
-    if (!user) return;
+  // Google authentication
+  const googleAuth = () => {
+    setLoading(true);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        console.log("Google user:", user); // Log the user object
+        createDoc(user);
+        toast.success("Logged in successfully");
+        navigate("/dashboard");
+      })
+      .catch((error) => toast.error(error.message))
+      .finally(() => setLoading(false));
+  };
 
+  // Create a user document
+  const createDoc = async (user) => {
+    if (!user) return;
     const userRef = doc(db, "users", user.uid);
     const userData = await getDoc(userRef);
-
     if (!userData.exists()) {
-      try {
-        console.log("new Account username", name);
-        await setDoc(doc(db, "users", user.uid), {
-          displayName: user.displayName ? user.displayName : user.email, // Set the displayName property using the provided name
-          email: user.email, // Use user.email instead of just 'email'
-          photoURL: user.photoURL ? user.photoURL : "",
-          createdAt: new Date(),
-        });
-
-        console.log("new Account username", user);
-      } catch (err) {
-        toast.error(err.message);
-      }
+      await setDoc(userRef, {
+        displayName: user.displayName || name,
+        email: user.email,
+        photoURL: user.photoURL || "",
+        createdAt: new Date(),
+      });
     }
   };
 
-  // google login or sign up function
-  const googleAuth = () => {
-    setLoading(true);
-    try {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          // This gives you a Google Access Token. you can use it to access the Google API.
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
-          // The signed-in user info.
-          const user = result.user;
-          console.log(user);
-          createDoc(user);
-          navigate("/dashboard");
-          toast.success("Login successfully");
-          // IdP data available using getAdditionlUserInfo(result)
-          setLoading(false);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-          setLoading(false);
-        });
-    } catch (error) {
-      toast.error(error.message);
+  // Handle password reset
+  const resetPasswordHandle = () => {
+    if (!email) {
+      toast.error("Please enter your email to reset password");
+      return;
     }
+    sendPasswordResetEmail(auth, email)
+      .then(() => toast.success("Password reset email sent"))
+      .catch((error) => toast.error(error.message));
   };
 
   return (
     <>
-      {loginForm ? (
+      {showResetForm ? (
         <div className="signup-wrapper">
-          <h2 className="title">
-            Login up on{" "}
-            <span style={{ color: "var(--primary-purple)" }}>Fanancley</span>
-          </h2>
+          <h2 className="title">Reset Password</h2>
           <InputComponent
-            type={"email"}
+            type="email"
             state={email}
             setState={setEmail}
-            placeholder={"Enter your email"}
-          />
-          <InputComponent
-            type={"password"}
-            state={password}
-            setState={setPassword}
-            placeholder={"Password"}
+            placeholder="Enter your email"
           />
           <Button
-            text={loading ? "Loading..." : "Login"}
+            text={loading ? "Loading..." : "Send Reset Email"}
+            disabled={loading}
+            onClick={resetPasswordHandle}
+            purple={true}
+          />
+          <p className="have-an-account">
+            Remembered your details?{" "}
+            <span
+              onClick={() => setShowResetForm(false)}
+              style={{ cursor: "pointer" }}
+            >
+              Go back
+            </span>
+          </p>
+        </div>
+      ) : loginForm ? (
+        <div className="signup-wrapper">
+          <h2 className="title">Log In</h2>
+          <InputComponent
+            type="email"
+            state={email}
+            setState={setEmail}
+            placeholder="Enter your email"
+          />
+          <InputComponent
+            type="password"
+            state={password}
+            setState={setPassword}
+            placeholder="Password"
+          />
+          <Button
+            text={loading ? "Loading..." : "Log In"}
             disabled={loading}
             onClick={signInHandle}
             purple={true}
           />
           <p className="or-name">or</p>
           <Button
-            text={loading ? "Loading..." : "Login with Google"}
+            text={loading ? "Loading..." : "Log in with Google"}
             onClick={googleAuth}
             purple={false}
             icon={<FcGoogle className="FcGoogle" />}
-          ></Button>
+          />
+          <p className="have-an-account">
+            Forgot your password?{" "}
+            <span
+              onClick={() => setShowResetForm(true)}
+              style={{ cursor: "pointer" }}
+            >
+              Reset here
+            </span>
+          </p>
           <p className="have-an-account">
             Don't have an account?{" "}
             <span
               onClick={() => setLoginForm(false)}
               style={{ cursor: "pointer" }}
             >
-              Click here
+              Sign up
             </span>
           </p>
         </div>
       ) : (
         <div className="signup-wrapper">
-          <h2 className="title">
-            Sign Up on{" "}
-            <span style={{ color: "var(--primary-purple)" }}>Financely</span>
-          </h2>
+          <h2 className="title">Sign Up</h2>
           <InputComponent
-            type={"text"}
+            type="text"
             state={name}
             setState={setName}
-            placeholder={"Enter your name"}
+            placeholder="Enter your name"
           />
           <InputComponent
-            type={"email"}
+            type="email"
             state={email}
             setState={setEmail}
-            placeholder={"Enter your email"}
+            placeholder="Enter your email"
           />
           <InputComponent
-            type={"password"}
+            type="password"
             state={password}
             setState={setPassword}
-            placeholder={"Password"}
+            placeholder="Password"
           />
           <InputComponent
-            type={"password"}
+            type="password"
             state={cfPassword}
             setState={setcfPassword}
-            placeholder={"Confirm password"}
+            placeholder="Confirm password"
           />
           <Button
-            text={loading ? "Loading..." : "Sign up"}
+            text={loading ? "Loading..." : "Sign Up"}
             disabled={loading}
-            onClick={signUnHandle}
+            onClick={signUpHandle}
             purple={true}
           />
           <p className="or-name">or</p>
@@ -224,14 +227,14 @@ const SignupSignin = () => {
             purple={false}
             icon={<FcGoogle className="FcGoogle" />}
             onClick={googleAuth}
-          ></Button>
+          />
           <p className="have-an-account">
             Already have an account?{" "}
             <span
               onClick={() => setLoginForm(true)}
               style={{ cursor: "pointer" }}
             >
-              Click here
+              Log in
             </span>
           </p>
         </div>

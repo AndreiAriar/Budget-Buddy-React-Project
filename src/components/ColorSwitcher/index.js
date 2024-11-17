@@ -5,60 +5,58 @@ const ColorSwitcher = ({ handleColorChange }) => {
   return (
     <div className="color-switcher">
       <div
-        className="color-option color-box green"
+        className="color-option color-box muted-olive-green"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#20bf6b",
-            "--primary-purple-shade": "#26de81",
+            "--primary-purple": "#556b2f", // Muted Olive Green
+            "--primary-purple-shade": "#333333", // Charcoal
           })
         }
       ></div>
       <div
-        className="color-option color-box pink"
+        className="color-option color-box deep-burgundy"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#e83e8c",
-            "--primary-purple-shade": "#e80065",
+            "--primary-purple": "#5e2129", // Deep Burgundy
+            "--primary-purple-shade": "#333333", // Charcoal
           })
         }
       ></div>
       <div
-        className="color-option color-box orange"
+        className="color-option color-box coffee-color"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#fc7b54",
-            "--primary-purple-shade": "#fd8a67",
+            "--primary-purple": "#4b2e2e", // Coffee Color
+            "--primary-purple-shade": "#333333", // Charcoal
           })
         }
       ></div>
       <div
-        data-tip="Light-green"
-        className="color-option color-box light-green"
+        className="color-option color-box soft-gray"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#10ac84",
-            "--primary-purple-shade": "#1dd1a1",
+            "--primary-purple": "#c99585", // Updated color
+            "--primary-purple-shade": "#333333", // Charcoal
           })
         }
       ></div>
       <div
-        data-tip="Purple-light"
-        className="color-option color-box default"
+        data-tip="Slate Blue"
+        className="color-option color-box slate-blue"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#6842EF",
-            "--primary-purple-shade": "#8161f4",
+            "--primary-purple": "#6a7f8d", // Slate Blue
+            "--primary-purple-shade": "#333333", // Charcoal
           })
         }
       ></div>
-      {/* Updated Folder-like Yellow Color Option */}
       <div
-        data-tip="Yellow"
-        className="color-option color-box yellow"
+        data-tip="Charcoal"
+        className="color-option color-box charcoal"
         onClick={() =>
           handleColorChange({
-            "--primary-purple": "#f4c542",  // Folder-like yellow color
-            "--primary-purple-shade": "#f4c542",  // Folder-like yellow shade
+            "--primary-purple": "#333333", // Charcoal
+            "--primary-purple-shade": "#6a7f8d", // Slate Blue
           })
         }
       ></div>

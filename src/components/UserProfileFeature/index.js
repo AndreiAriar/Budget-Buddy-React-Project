@@ -59,6 +59,10 @@ const UserProfileFeature = () => {
     toast.success("Theme color updated!");
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state while fetching user data
+  }
+
   return (
     <div className="profile-feature">
       <div className="user-profile">
@@ -74,9 +78,7 @@ const UserProfileFeature = () => {
       </div>
       {user && (
         <div className="buttons">
-          <h4 onClick={() => setIsProfileOpen(true)}>
-            {user.displayName || user.email}
-          </h4>
+          <h4 onClick={() => setIsProfileOpen(true)}>{user.displayName || user.email}</h4>
           <p onClick={logout} className="logout-btn">
             Logout
           </p>
@@ -117,7 +119,6 @@ const UserProfileFeature = () => {
           </form>
         </div>
       )}
-      {/* Make sure the handleColorChange function is passed to ColorSwitcher */}
       <ColorSwitcher handleColorChange={handleColorChange} />
     </div>
   );

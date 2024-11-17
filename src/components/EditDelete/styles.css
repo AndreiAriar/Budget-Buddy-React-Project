@@ -5,33 +5,56 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* Softer, lighter overlay */
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure modal appears on top */
+  z-index: 1000;
 }
 
 /* Modal Design */
 .modal {
-  width: 35vw; /* Slightly smaller width for minimalist feel */
+  width: 35vw;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border-radius: 8px;
+  background: #f9f9f9;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* Close Button (X Icon) */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background: #e74c3c;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  color: #fff;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
-  padding: 2rem; /* More padding for better space */
-  border-radius: 8px; /* Slightly rounder corners */
-  background: #f9f9f9; /* Light gray background for a minimalist design */
-  color: #333; /* Darker text for better contrast */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #c0392b;
+  transform: scale(1.1);
 }
 
 /* Modal Header (Title) */
 .modal h3 {
   margin-bottom: 1.5rem;
-  font-size: 1.5rem; /* Larger title for emphasis */
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #555; /* Darker shade for the title */
+  color: #555;
+  text-align: center;
 }
 
 /* Modal Content Layout */
@@ -40,86 +63,82 @@
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  max-width: 400px; /* Max width for consistent design */
+  max-width: 400px;
 }
 
 /* Form Labels */
 .modal-content label {
   font-weight: 500;
   font-size: 1rem;
-  color: #666; /* Subtle color for labels */
+  color: #666;
 }
 
 /* Custom Input Styling */
 .custome-input {
   width: 100%;
   padding: 10px;
-  margin: 5px 0;
-  border-radius: 6px; /* Slightly more rounded corners */
-  border: 1px solid #ddd; /* Lighter border for cleaner look */
-  background: #fff; /* White background for inputs */
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
   font-size: 1rem;
   color: #333;
-  transition: border-color 0.3s ease; /* Smooth border color transition */
+  transition: border-color 0.3s ease;
 }
 
 .custome-input:focus {
-  border-color: #007bff; /* Highlight input on focus */
-  outline: none; /* Remove default outline */
+  border-color: #007bff;
+  outline: none;
 }
 
 /* Modal Buttons Layout */
 .modal-buttons {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-evenly;
   width: 100%;
 }
 
-/* Button Styling */
-.modal-buttons button {
-  padding: 0.75rem 1.5rem; /* Larger button size */
-  cursor: pointer;
-  border-radius: 6px; /* Slightly rounded corners */
+/* Icon Buttons */
+.icon-btn {
+  font-size: 1.5rem;
   border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease; /* Smooth transition on hover */
+  cursor: pointer;
+  background: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background 0.3s ease;
 }
 
-.modal-buttons button.btn-blue {
-  background-color: #007bff;
-  color: white;
+.icon-btn.save-btn {
+  color: #007bff;
 }
 
-.modal-buttons button.btn-blue:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+.icon-btn.save-btn:hover {
+  background: #e7f3ff;
 }
 
-.modal-buttons button.btn-red {
-  background-color: #e74c3c;
-  color: white;
+.icon-btn.delete-btn {
+  color: #e74c3c;
 }
 
-.modal-buttons button.btn-red:hover {
-  background-color: #c0392b; /* Darker red on hover */
+.icon-btn.delete-btn:hover {
+  background: #fdecea;
 }
 
 /* Responsive Design for Small Screens */
 @media (max-width: 675px) {
   .modal {
-    width: 50vw; /* Adjust modal width on smaller screens */
+    width: 50vw;
   }
 }
 
 @media (max-width: 535px) {
   .modal {
-    width: 70vw; /* Further adjust modal width on very small screens */
+    width: 70vw;
   }
 }
 
 @media (max-width: 406px) {
   .modal {
-    width: 85vw; /* Adjust for extra small screens */
+    width: 85vw;
   }
 }

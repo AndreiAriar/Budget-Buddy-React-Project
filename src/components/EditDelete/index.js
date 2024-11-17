@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 
-const EditEditDeleteModal = ({ transaction, onSave, onCancel, onDelete }) => {
+const EditDelete = ({ transaction, onSave, onCancel, onDelete, show }) => {
   const [editedTransaction, setEditedTransaction] = useState(transaction);
+
+  useEffect(() => {
+    setEditedTransaction(transaction);
+  }, [transaction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,9 +24,16 @@ const EditEditDeleteModal = ({ transaction, onSave, onCancel, onDelete }) => {
     onDelete(editedTransaction);
   };
 
+  if (!show) {
+    return null;
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <button className="close-btn" onClick={onCancel} aria-label="Close">
+          ✖
+        </button>
         <h3>Edit or Delete Transaction</h3>
         <div className="modal-content">
           <div>
@@ -45,15 +56,32 @@ const EditEditDeleteModal = ({ transaction, onSave, onCancel, onDelete }) => {
               onChange={handleChange}
             />
           </div>
+          <div>
+            <label>Type</label>
+            <input
+              type="text"
+              name="type"
+              className="custome-input"
+              value={editedTransaction.type}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Date</label>
+            <input
+              type="date"
+              name="date"
+              className="custome-input"
+              value={editedTransaction.date}
+              onChange={handleChange}
+            />
+          </div>
           <div className="modal-buttons">
-            <button className="btn btn-blue" onClick={handleSave}>
-              Save
+            <button className="icon-btn save-btn" onClick={handleSave}>
+              💾
             </button>
-            <button className="btn btn-red" onClick={handleDelete}>
-              Delete
-            </button>
-            <button className="btn btn-red" onClick={onCancel}>
-              Cancel
+            <button className="icon-btn delete-btn" onClick={handleDelete}>
+              🗑
             </button>
           </div>
         </div>
@@ -62,4 +90,4 @@ const EditEditDeleteModal = ({ transaction, onSave, onCancel, onDelete }) => {
   );
 };
 
-export default EditEditDeleteModal;
+export default EditDelete;

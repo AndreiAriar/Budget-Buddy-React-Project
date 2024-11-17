@@ -6,42 +6,78 @@
     padding: 2rem;
     padding-bottom: 1.2rem;
     border-radius: 1rem;
-}
-
-.title {
-    font-size: 1.2rem;
+    background-color: var(--white);
+  }
+  
+  .title {
+    font-size: 1.6rem;
+    font-weight: bold;
     text-align: center;
+    color: var(--primary-purple);
     margin-bottom: 1.5rem;
-}
-
-.or-name {
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--black);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .input-field:focus {
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 5px var(--primary-purple);
+  }
+  
+  .button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--white);
+    background-color: var(--primary-purple);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .button:hover {
+    background-color: var(--dark-purple);
+  }
+  
+  .or-name {
     font-size: 1rem;
     font-weight: 500;
     color: var(--black);
     text-align: center;
-    margin-block: .4rem;
-}
-
-.have-an-account {
-    margin-top: .9rem;
-    font-size: .8rem;
-    text-align: center;
+    margin-block: 1rem;
+  }
+  
+  .have-an-account {
+    font-size: 0.9rem;
     font-weight: 500;
-}
-
-.have-an-account span:hover {
+    text-align: center;
+  }
+  
+  .have-an-account span {
     color: var(--primary-purple);
-    transition: ease-in-out .3s;
-}
-
-.FcGoogle {
-    margin-right: .5rem;
-    font-size: 1.2rem;
-}
-
-@media (max-width: 759px) {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .have-an-account span:hover {
+    color: var(--dark-purple);
+    transition: ease-in-out 0.3s;
+  }
+  
+  @media (max-width: 759px) {
     .signup-wrapper {
-        width: 90vw;
-        margin-top: 2.5rem;
+      width: 90vw;
+      margin-top: 2.5rem;
     }
-}
+  }
+  

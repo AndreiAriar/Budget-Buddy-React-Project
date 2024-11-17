@@ -2,42 +2,42 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
     background: var(--white);
     border-radius: 1rem;
-    padding: .5rem;
-}
-
-.color-switcher .color-box {
+    padding: 0.5rem;
+  }
+  
+  .color-switcher .color-box {
     cursor: pointer;
     width: 35px;
     height: 35px;
     border-radius: 50%;
     background: var(--white);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset !important;
-}
-
-.color-switcher .green {
-    background: #20bf6b;
-}
-
-.color-switcher .pink {
-    background: #e83e8c;
-}
-
-.color-switcher .orange {
-    background: #fc7b54;
-}
-
-.color-switcher .light-green {
-    background: #10ac84;
-}
-
-.color-switcher .default {
-    background: #6842EF;
-}
-
-/* Updated Yellow Folder-like Color */
-.color-switcher .yellow {
-    background: #f4c542; /* Folder yellow color */
-}
+  }
+  
+  .color-switcher .muted-olive-green {
+    background: #556b2f; /* Muted Olive Green */
+  }
+  
+  .color-switcher .deep-burgundy {
+    background: #5e2129; /* Deep Burgundy */
+  }
+  
+  .color-switcher .coffee-color {
+    background: #4b2e2e; /* Coffee Color */
+  }
+  
+  .color-switcher .soft-gray {
+    background: #c99585; /* Updated color */
+  }
+  
+  .color-switcher .slate-blue {
+    background: #6a7f8d; /* Slate Blue */
+  }
+  
+  .color-switcher .charcoal {
+    background: #333333; /* Charcoal */
+  }
+  
