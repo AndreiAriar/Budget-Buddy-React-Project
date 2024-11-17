@@ -1,0 +1,125 @@
+/* Modal Overlay (Background) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Softer, lighter overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure modal appears on top */
+}
+
+/* Modal Design */
+.modal {
+  width: 35vw; /* Slightly smaller width for minimalist feel */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  padding: 2rem; /* More padding for better space */
+  border-radius: 8px; /* Slightly rounder corners */
+  background: #f9f9f9; /* Light gray background for a minimalist design */
+  color: #333; /* Darker text for better contrast */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Modal Header (Title) */
+.modal h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem; /* Larger title for emphasis */
+  font-weight: 600;
+  color: #555; /* Darker shade for the title */
+}
+
+/* Modal Content Layout */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px; /* Max width for consistent design */
+}
+
+/* Form Labels */
+.modal-content label {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #666; /* Subtle color for labels */
+}
+
+/* Custom Input Styling */
+.custome-input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 6px; /* Slightly more rounded corners */
+  border: 1px solid #ddd; /* Lighter border for cleaner look */
+  background: #fff; /* White background for inputs */
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s ease; /* Smooth border color transition */
+}
+
+.custome-input:focus {
+  border-color: #007bff; /* Highlight input on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Modal Buttons Layout */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Button Styling */
+.modal-buttons button {
+  padding: 0.75rem 1.5rem; /* Larger button size */
+  cursor: pointer;
+  border-radius: 6px; /* Slightly rounded corners */
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease; /* Smooth transition on hover */
+}
+
+.modal-buttons button.btn-blue {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-buttons button.btn-blue:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.modal-buttons button.btn-red {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.modal-buttons button.btn-red:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 675px) {
+  .modal {
+    width: 50vw; /* Adjust modal width on smaller screens */
+  }
+}
+
+@media (max-width: 535px) {
+  .modal {
+    width: 70vw; /* Further adjust modal width on very small screens */
+  }
+}
+
+@media (max-width: 406px) {
+  .modal {
+    width: 85vw; /* Adjust for extra small screens */
+  }
+}

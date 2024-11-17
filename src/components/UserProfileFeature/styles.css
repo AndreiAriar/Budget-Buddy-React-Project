@@ -1,0 +1,96 @@
+.profile-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.no-photo {
+  font-size: 40px;
+  color: #888;
+}
+
+.settings-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.profile-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 300px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.profile-form input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.profile-form .btn {
+  background: #6842ef;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile-form .btn:hover {
+  background: #8161f4;
+}
+
+.profile-form .cancel-btn {
+  background: #ddd;
+  color: #333;
+}
+
+.profile-form .cancel-btn:hover {
+  background: #bbb;
+}
+
+.img {
+  width: 60%;
+  border-radius: 50%;
+}
+
+.logout-btn {
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  opacity: 0.8;
+}
