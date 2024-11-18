@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 
@@ -31,9 +32,9 @@ const EditDelete = ({ transaction, onSave, onCancel, onDelete, show }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <button className="close-btn" onClick={onCancel} aria-label="Close">
-          ✖
-        </button>
+      <button className="icon-btn close-btn" onClick={handleSave}>
+        ✖
+      </button>
         <h3>Edit or Delete Transaction</h3>
         <div className="modal-content">
           <div>
