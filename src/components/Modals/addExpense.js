@@ -1,20 +1,35 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input, DatePicker, Select } from "antd";
 
-const AddExpense = ({
-  isExpenseModalVisible,
-  handleExpenseCancel,
-  onFinish,
-}) => {
+// Predefined currencies with symbols
+const predefinedCurrencies = [
+  { code: "USD", symbol: "$", name: "US Dollar" },
+  { code: "EUR", symbol: "€", name: "Euro" },
+  { code: "GBP", symbol: "£", name: "British Pound" },
+  { code: "INR", symbol: "₹", name: "Indian Rupee" },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+  { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
+  { code: "SEK", symbol: "kr", name: "Swedish Krona" },
+  // Add more currencies as needed
+];
+
+const AddExpense = ({ isExpenseModalVisible, handleExpenseCancel, onFinish }) => {
   const [form] = Form.useForm();
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState("");
 
   // Predefined tags for expenses
   const expenseTags = ["Food", "Rent", "Utilities", "Entertainment", "Transport"];
 
-  // Handle multiple tag selection or input
   const handleTagChange = (value) => {
     setSelectedTags(value);
+  };
+
+  const handleCurrencyChange = (value) => {
+    setSelectedCurrency(value);
   };
 
   return (
@@ -29,9 +44,10 @@ const AddExpense = ({
         form={form}
         layout="vertical"
         onFinish={(values) => {
-          onFinish({ ...values, tags: selectedTags }, "expense");
+          onFinish({ ...values, tags: selectedTags, currency: selectedCurrency }, "expense");
           form.resetFields();
-          setSelectedTags([]); // Reset tags after form submission
+          setSelectedTags([]);
+          setSelectedCurrency("");
         }}
       >
         <Form.Item
@@ -50,6 +66,28 @@ const AddExpense = ({
           rules={[{ required: true, message: "Please enter the expense amount" }]}
         >
           <Input type="number" className="custome-input" />
+        </Form.Item>
+
+        <Form.Item
+          style={{ fontWeight: 600 }}
+          label="Currency"
+          name="currency"
+          rules={[{ required: true, message: "Please select or input a currency" }]}
+        >
+          <Select
+            mode="tags"
+            placeholder="Select or input currency"
+            value={selectedCurrency}
+            onChange={handleCurrencyChange}
+            className="custome-input"
+            tokenSeparators={[","]}
+          >
+            {predefinedCurrencies.map(({ code, symbol, name }) => (
+              <Select.Option key={code} value={`${code} (${symbol})`}>
+                {`${code} (${symbol}) - ${name}`}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -73,7 +111,7 @@ const AddExpense = ({
             value={selectedTags}
             onChange={handleTagChange}
             className="custome-input"
-            tokenSeparators={[","]} // Allows comma as a separator for multiple tags
+            tokenSeparators={[","]}
           >
             {expenseTags.map((tag) => (
               <Select.Option key={tag} value={tag}>

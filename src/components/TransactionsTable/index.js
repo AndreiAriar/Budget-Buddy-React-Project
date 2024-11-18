@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { Radio, Select, Table, Button } from "antd";
+import { Radio, Select, Table, Button, Input } from "antd";
 import { parse, unparse } from "papaparse";
 import { toast } from "react-toastify";
 import EditEditDeleteModal from "../EditDelete";
@@ -15,7 +15,7 @@ const TransactionsTable = ({
   transactions,
   addTransaction,
   fetchTransactions,
-  onResetBalance, // Added as a prop
+  onResetBalance,
 }) => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -24,7 +24,15 @@ const TransactionsTable = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [user] = useAuthState(auth);
 
-  // Define columns for the table
+  const predefinedCurrencies = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    INR: "₹",
+  };
+
+  const predefinedTags = ["Food", "Rent", "Salary", "Shopping", "Utilities"];
+
   const columns = [
     {
       title: "Name",
@@ -35,11 +43,38 @@ const TransactionsTable = ({
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
+      render: (text, record) => {
+        const currencySymbol =
+          predefinedCurrencies[record.currency] || record.currency || "";
+        const amount = parseFloat(record.amount);
+
+        // Check if amount is a valid number
+        if (isNaN(amount)) {
+          return "Invalid Amount";
+        }
+
+        return `${currencySymbol} ${amount.toFixed(2)}`;
+      },
     },
     {
       title: "Type",
       dataIndex: "type",
       key: "type",
+    },
+    {
+      title: "Tags",
+      dataIndex: "tags",
+      key: "tags",
+      render: (tags) => {
+        if (!tags || tags.length === 0) return "";
+        return tags
+          .map((tag) =>
+            predefinedTags.includes(tag)
+              ? tag
+              : `Custom: ${tag}` // Display custom tags with a "Custom:" prefix
+          )
+          .join(", ");
+      },
     },
     {
       title: "Date",
@@ -68,13 +103,13 @@ const TransactionsTable = ({
     },
   ];
 
-  let filterTransactionsArray = transactions.filter(
+  const filterTransactionsArray = transactions.filter(
     (item) =>
       item.name.toLowerCase().includes(search.toLowerCase()) &&
       item.type.includes(typeFilter)
   );
 
-  let sortedTransactions = filterTransactionsArray.sort((a, b) => {
+  const sortedTransactions = filterTransactionsArray.sort((a, b) => {
     if (sortKey === "date") {
       return new Date(a.date) - new Date(b.date);
     } else if (sortKey === "amount") {
@@ -84,13 +119,12 @@ const TransactionsTable = ({
     }
   });
 
-  // This function is for downloading or exporting the CSV file
   const exportCSV = () => {
-    var csv = unparse({
-      fields: ["name", "type", "tag", "date", "amount"],
+    const csv = unparse({
+      fields: ["name", "type", "tags", "date", "amount", "currency"],
       data: transactions,
     });
-    var data = new Blob([csv], { type: "text/csv:charsetutf-8;" });
+    const data = new Blob([csv], { type: "text/csv:charset=utf-8;" });
     const csvURL = window.URL.createObjectURL(data);
     const tempLink = document.createElement("a");
     tempLink.href = csvURL;
@@ -100,7 +134,6 @@ const TransactionsTable = ({
     document.body.removeChild(tempLink);
   };
 
-  // Function for importing a CSV file
   const importCSV = (event) => {
     event.preventDefault();
     try {
@@ -111,7 +144,6 @@ const TransactionsTable = ({
             if (isNaN(transaction.amount)) {
               continue;
             }
-
             const newTransaction = {
               ...transaction,
               amount: parseFloat(transaction.amount),
@@ -150,13 +182,12 @@ const TransactionsTable = ({
   };
 
   const handleEditCancel = () => {
-    setShowEditModal(false); // Close the modal when cancel is triggered
+    setShowEditModal(false);
   };
 
-  // Handling the reset balance
   const handleResetBalanceClick = () => {
     if (onResetBalance) {
-      onResetBalance(); // Call the function passed as prop
+      onResetBalance();
     }
   };
 
@@ -210,7 +241,6 @@ const TransactionsTable = ({
             style={{ display: "none" }}
           />
         </div>
-        {/* Reset Balance Button */}
         <Button onClick={handleResetBalanceClick} className="btn btn-red">
           Reset Balance
         </Button>
@@ -227,7 +257,7 @@ const TransactionsTable = ({
         {showEditModal && (
           <EditEditDeleteModal
             show={showEditModal}
-            onClose={handleEditCancel} // Pass the cancel function here
+            onClose={handleEditCancel}
             transaction={selectedTransaction}
             onSave={handleEditSave}
             onDelete={handleDeleteSave}
